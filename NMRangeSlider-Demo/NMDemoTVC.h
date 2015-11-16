@@ -21,8 +21,6 @@
 @property (weak, nonatomic) IBOutlet NMRangeSlider *crossOverSlider;
 
 @property (weak, nonatomic) IBOutlet NMRangeSlider *labelSlider;
-@property (weak, nonatomic) IBOutlet UILabel *lowerLabel;
-@property (weak, nonatomic) IBOutlet UILabel *upperLabel;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *programaticallyContainerCell;
 

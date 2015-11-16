@@ -704,4 +704,58 @@ NSUInteger DeviceSystemMajorVersion() {
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
+#pragma mark Labels showing the value
+
+- (UILabel *) lowerLabel {
+    if (!_lowerLabel) {
+        _lowerLabel = [self _addSliderLabel];
+    }
+    return _lowerLabel;
+}
+
+- (UILabel *) upperLabel {
+    if (!_upperLabel) {
+        _upperLabel =[self _addSliderLabel];
+    }
+    return _upperLabel;
+}
+
+-(UILabel *)_addSliderLabel {
+    // this is hokey - these views should be added directly as subviews.//TODO
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+    label.textAlignment = UITextAlignmentCenter;
+    [self.superview addSubview:label];
+    return label;
+}
+
+- (void) setShowTextLabelsForValue:(BOOL) show {
+    if (show) {
+        [self addTarget:self action:@selector(_updateSliderLabels) forControlEvents:UIControlEventValueChanged];
+        [self _updateSliderLabels];
+    } else {
+        [self removeTarget:self action:@selector(_updateSliderLabels) forControlEvents:UIControlEventValueChanged];
+        [_upperLabel removeFromSuperview];
+        [_lowerLabel removeFromSuperview];
+    }
+}
+
+- (void) _updateSliderLabels
+{
+    // You get get the center point of the slider handles and use this to arrange other subviews
+    
+    CGPoint lowerCenter;
+    lowerCenter.x = (self.lowerHandle.center.x + self.frame.origin.x);
+    lowerCenter.y = (self.center.y - 30.0f);
+    self.lowerLabel.center = lowerCenter;
+    self.lowerLabel.text = [NSString stringWithFormat:@"%d", (int)self.lowerValue];
+    
+    CGPoint upperCenter;
+    upperCenter.x = (self.upperHandle.center.x + self.frame.origin.x);
+    upperCenter.y = (self.center.y - 30.0f);
+    self.upperLabel.center = upperCenter;
+    self.upperLabel.text = [NSString stringWithFormat:@"%d", (int)self.upperValue];
+}
+
+
+
 @end

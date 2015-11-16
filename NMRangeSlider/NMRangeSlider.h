@@ -91,4 +91,11 @@
 
 - (void) setLowerValue:(float) lowerValue upperValue:(float) upperValue animated:(BOOL)animated;
 
+
+// n13: - Added these to the class itself, it's too messy to take care of this in a view controller
+@property (strong, nonatomic) IBOutlet UILabel *lowerLabel;
+@property (strong, nonatomic) IBOutlet UILabel *upperLabel;
+- (void) setShowTextLabelsForValue:(BOOL) show;
+
+
 @end
