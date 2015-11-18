@@ -87,6 +87,7 @@ NSUInteger DeviceSystemMajorVersion() {
     _upperMinimumValue = NAN;
     _upperHandleHidden = NO;
     _lowerHandleHidden = NO;
+    _showTextLabelsForValue = NO;
     
     _lowerHandleHiddenWidth = 2.0f;
     _upperHandleHiddenWidth = 2.0f;
@@ -221,13 +222,21 @@ NSUInteger DeviceSystemMajorVersion() {
 - (void) setLowerHandleHidden:(BOOL)lowerHandleHidden
 {
     _lowerHandleHidden = lowerHandleHidden;
+    [self updateLabels];
     [self setNeedsLayout];
 }
 
 - (void) setUpperHandleHidden:(BOOL)upperHandleHidden
 {
     _upperHandleHidden = upperHandleHidden;
+    [self updateLabels];
     [self setNeedsLayout];
+}
+
+- (void)updateLabels {
+    _upperLabel.hidden = !_showTextLabelsForValue || _upperHandleHidden;
+    _lowerLabel.hidden = !_showTextLabelsForValue || _lowerHandleHidden;
+
 }
 
 //ON-Demand images. If the images are not set, then the default values are loaded.
@@ -725,17 +734,20 @@ NSUInteger DeviceSystemMajorVersion() {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.textAlignment = UITextAlignmentCenter;
     [self.superview addSubview:label];
+    label.hidden = YES;
     return label;
 }
 
 - (void) setShowTextLabelsForValue:(BOOL) show {
-    if (show) {
-        [self addTarget:self action:@selector(_updateSliderLabels) forControlEvents:UIControlEventValueChanged];
-        [self _updateSliderLabels];
-    } else {
-        [self removeTarget:self action:@selector(_updateSliderLabels) forControlEvents:UIControlEventValueChanged];
-        [_upperLabel removeFromSuperview];
-        [_lowerLabel removeFromSuperview];
+    if (_showTextLabelsForValue != show) {
+        _showTextLabelsForValue = show;
+        [self updateLabels];
+        if (show) {
+            [self addTarget:self action:@selector(_updateSliderLabels) forControlEvents:UIControlEventValueChanged];
+            [self _updateSliderLabels];
+        } else {
+            [self removeTarget:self action:@selector(_updateSliderLabels) forControlEvents:UIControlEventValueChanged];
+        }
     }
 }
 
