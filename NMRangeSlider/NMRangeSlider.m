@@ -21,8 +21,6 @@ NSUInteger DeviceSystemMajorVersion() {
     return _deviceSystemMajorVersion;
 }
 
-
-
 @interface NMRangeSlider ()
 {
     float _lowerTouchOffset;
@@ -761,13 +759,23 @@ NSUInteger DeviceSystemMajorVersion() {
 {
     if (!self.lowerLabel.hidden) {
         CGFloat labelY = self.bounds.size.height/2.0 - 30.0f;
-        self.lowerLabel.center = CGPointMake(self.lowerHandle.center.x, labelY);;
-        self.lowerLabel.text = [NSString stringWithFormat:@"%d", (int)self.lowerValue];
+        self.lowerLabel.center = CGPointMake(self.lowerHandle.center.x, labelY);
+
+        if (_labelTextTransform) {
+            self.lowerLabel.text = _labelTextTransform(self.lowerValue);
+        } else {
+            self.lowerLabel.text = [NSString stringWithFormat:@"%d", (int)self.lowerValue];
+        }
     }
     if (!self.upperLabel.hidden) {
         CGFloat labelY = self.bounds.size.height/2.0 - 30.0f;
         self.upperLabel.center = CGPointMake(self.upperHandle.center.x, labelY);
-        self.upperLabel.text = [NSString stringWithFormat:@"%d", (int)self.upperValue];
+        if (_labelTextTransform) {
+            self.upperLabel.text = _labelTextTransform(self.upperValue);
+        } else {
+            self.upperLabel.text = [NSString stringWithFormat:@"%d", (int)self.upperValue];
+        }
+
     }
 }
 
